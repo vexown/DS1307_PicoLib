@@ -179,15 +179,44 @@ static uint8_t I2C_Register_Read(uint8_t registerAddress)
 	return reg_value;
 }
 
+static uint8_t Enable_DS1307_Oscillator() 
+{
+	size_t length;
+	uint32_t errorCount = 0;
+	const uint32_t maxRetries = 5;
+	const uint32_t retryDelayUs = 5;
+
+	printf("0x7 reg = %x \n", I2C_Register_Read(0x07));
+
+    uint8_t outputData_Reset[] = {0x07, 0x00};
+	length = sizeof(outputData_Reset);
+	while(!i2c_write_blocking(i2c_default, DS1307_I2C_Address, outputData_Reset, length, false))
+	{
+		printf("I2C write transaction failed. Retrying... "); /* Data not acknowledged by slave (or some other error) */
+
+		sleep_us(retryDelayUs);
+		errorCount++;
+		if(errorCount > maxRetries)
+		{
+			return MPU6050_REGISTER_I2C_READ_FAIL;
+		}
+	}
+	errorCount = 0;
+
+	printf("Oscillator enabled \n");
+
+	return STATUS_SUCCESS;
+}
+
 int main() 
 {
     stdio_init_all();
 
 	/* Reset the I2C0 controller to get a fresh clear state */
-	Reset_I2C0();
-
+	//Reset_I2C0();
+	i2c_init(i2c_default, I2C_FAST_MODE);
     /* Initial Configuration of the I2C0 */
-    I2C_Initialize(I2C_FAST_MODE);
+    //I2C_Initialize(I2C_FAST_MODE);
 
 	/* Configure I2C pins */
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
@@ -198,12 +227,15 @@ int main()
     /* Make the I2C pins available to picotool */
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
+	//(void)Enable_DS1307_Oscillator();
+	sleep_ms(1000); //give ds1307 a sec
+
     while (1) 
     {
 		printf("Going into I2C reg read... \n");
-		uint8_t test_read = I2C_Register_Read(0x00);
-		printf("test_read = %i[s] \n", test_read);
-        sleep_ms(100);
+		uint8_t test_read = I2C_Register_Read(0x01);
+		printf("test_read = 0x%x[s] \n", test_read);
+        sleep_ms(1000);
     }
 
     return 0;
