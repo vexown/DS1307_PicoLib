@@ -1,5 +1,6 @@
 add_executable(DS1307
         DS1307.c
+        I2C_Driver.c
         )
 
 # pull in common dependencies

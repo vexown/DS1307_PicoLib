@@ -3,7 +3,10 @@
 
 #include "stdint.h"
 
-void I2C_Initialize(uint32_t baudrate);
-void Reset_I2C0();
+#define INCORRECT_MONTH (0xFF)
+#define INCORRECT_REQUEST (0xFF)
+#define BCD_TO_DEC (bool)0
+#define DEC_TO_BCD (bool)1
+#define LOWER_NIBBLE_MASK 0x0F
 
 #endif /* DS1307_H */

@@ -23,6 +23,8 @@
         "stdio.h": "c",
         "DS1307.h": "c",
         "i2c.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "resets.h": "c",
+        "time.h": "c"
     }
 }
