@@ -150,17 +150,13 @@ uint8_t ConvertBCD(uint16_t valueToConvert, bool direction)
 }
 
 /* Refer to Table 2. Timekeeper Registers in Datasheet to understand where the time is stored and how it's represented */
-uint8_t SetCurrentDate() 
+uint8_t SetCurrentDate(const char *buildDate, const char *buildTime) 
 {
 	size_t length;
 	uint32_t errorCount = 0;
 	const uint32_t maxRetries = 5;
 	const uint32_t retryDelayUs = 5;
 	uint8_t output[2];
-
-    const char *buildDate = __DATE__;
-    const char *buildTime = __TIME__;
-
 	char monthAbbrev[4];
     int day, month, year, hours, minutes, seconds;
     

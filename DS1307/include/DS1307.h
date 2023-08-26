@@ -4,7 +4,7 @@
 #include "stdint.h"
 
 int setupPinsI2C0();
-uint8_t SetCurrentDate();
+uint8_t SetCurrentDate(const char *buildDate, const char *buildTime);
 uint8_t ConvertBCD(uint16_t valueToConvert, bool direction);
 int getMonthNumber(const char *monthAbbreviation);
 uint8_t Enable_DS1307_Oscillator();
