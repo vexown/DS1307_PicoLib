@@ -237,13 +237,14 @@ int setupPinsI2C0()
 	return STATUS_SUCCESS;
 }
 
+/* Example of use:
 int main() 
 {
     stdio_init_all();
 
-	/* Reset the I2C0 controller to get a fresh clear state */
+	// Reset the I2C0 controller to get a fresh clear state 
 	Reset_I2C0();
-    /* Initial Configuration of the I2C0 */
+    // Initial Configuration of the I2C0 
     I2C_Initialize(I2C_FAST_MODE);
 
 	(void)setupPinsI2C0();
@@ -263,6 +264,7 @@ int main()
 
     return 0;
 }
+*/
 
 /** TODO:
  * - i2c_write_blocking function was still writing/reading via I2C even when I completely disconnected RTC module! This should not be! 
