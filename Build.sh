@@ -19,6 +19,8 @@ cmake ..
 echo Building...
 cmake --build .
 
+mv DS1307/libDS1307_LIB.a ../libDS1307_LIB.a
+
 echo "Press 'X' to exit the script."
 
 while true; do
