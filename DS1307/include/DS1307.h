@@ -3,6 +3,13 @@
 
 #include "stdint.h"
 
+int setupPinsI2C0();
+uint8_t SetCurrentDate();
+uint8_t ConvertBCD(uint16_t valueToConvert, bool direction);
+int getMonthNumber(const char *monthAbbreviation);
+uint8_t Enable_DS1307_Oscillator();
+uint8_t Disable_DS1307_SquareWaveOutput();
+
 #define INCORRECT_MONTH (0xFF)
 #define INCORRECT_REQUEST (0xFF)
 #define BCD_TO_DEC (bool)0

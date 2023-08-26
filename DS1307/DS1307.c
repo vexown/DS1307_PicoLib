@@ -44,12 +44,7 @@
 #define LOG(...) 
 #endif
 
-static int getMonthNumber(const char *monthAbbreviation);
-static uint8_t Disable_DS1307_SquareWaveOutput();
-static uint8_t Enable_DS1307_Oscillator();
-static uint8_t SetCurrentDate();
-
-static uint8_t Disable_DS1307_SquareWaveOutput() 
+uint8_t Disable_DS1307_SquareWaveOutput() 
 {
 	size_t length;
 	uint32_t errorCount = 0;
@@ -84,7 +79,7 @@ static uint8_t Disable_DS1307_SquareWaveOutput()
  * The CH bit in the seconds register will be set to a 1. The clock can be halted 
  * whenever the timekeeping functions are not required, which minimizes current (IBATDR). 
 */
-static uint8_t Enable_DS1307_Oscillator() 
+uint8_t Enable_DS1307_Oscillator() 
 {
 	size_t length;
 	uint32_t errorCount = 0;
@@ -116,7 +111,7 @@ static uint8_t Enable_DS1307_Oscillator()
 	return STATUS_SUCCESS;
 }
 
-static int getMonthNumber(const char *monthAbbreviation) 
+int getMonthNumber(const char *monthAbbreviation) 
 {
     const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -134,7 +129,7 @@ static int getMonthNumber(const char *monthAbbreviation)
     return INCORRECT_MONTH;  /* Return error value if the abbreviation is not found */
 }
 
-static uint8_t ConvertBCD(uint16_t valueToConvert, bool direction)
+uint8_t ConvertBCD(uint16_t valueToConvert, bool direction)
 {
 	uint8_t convertedValue;
 
@@ -155,7 +150,7 @@ static uint8_t ConvertBCD(uint16_t valueToConvert, bool direction)
 }
 
 /* Refer to Table 2. Timekeeper Registers in Datasheet to understand where the time is stored and how it's represented */
-static uint8_t SetCurrentDate() 
+uint8_t SetCurrentDate() 
 {
 	size_t length;
 	uint32_t errorCount = 0;
@@ -228,15 +223,8 @@ static uint8_t SetCurrentDate()
 	return STATUS_SUCCESS;
 }
 
-int main() 
+int setupPinsI2C0()
 {
-    stdio_init_all();
-
-	/* Reset the I2C0 controller to get a fresh clear state */
-	Reset_I2C0();
-    /* Initial Configuration of the I2C0 */
-    I2C_Initialize(I2C_FAST_MODE);
-
 	/* Configure I2C pins */
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
@@ -246,6 +234,19 @@ int main()
     /* Make the I2C pins available to picotool */
     bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
 
+	return STATUS_SUCCESS;
+}
+
+int main() 
+{
+    stdio_init_all();
+
+	/* Reset the I2C0 controller to get a fresh clear state */
+	Reset_I2C0();
+    /* Initial Configuration of the I2C0 */
+    I2C_Initialize(I2C_FAST_MODE);
+
+	(void)setupPinsI2C0();
 	(void)Disable_DS1307_SquareWaveOutput();
 	(void)Enable_DS1307_Oscillator();
 	(void)SetCurrentDate();
