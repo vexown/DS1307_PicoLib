@@ -14,6 +14,7 @@
 #define MPU6050_SENSOR_DATA_READ_FAIL		 ((uint32_t)0xDEADBEEF)
 
 uint8_t I2C_Register_Read(uint8_t registerAddress);
+uint8_t I2C_Register_Write(uint8_t registerAddress, uint8_t registerValue);
 void I2C_Initialize(uint32_t baudrate);
 void Reset_I2C0();
 

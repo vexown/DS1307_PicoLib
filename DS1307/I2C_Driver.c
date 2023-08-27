@@ -138,3 +138,27 @@ uint8_t I2C_Register_Read(uint8_t registerAddress)
 	}
 	return reg_value;
 }
+
+uint8_t I2C_Register_Write(uint8_t registerAddress, uint8_t registerValue) 
+{
+	size_t length;
+	uint32_t errorCount = 0;
+	const uint32_t maxRetries = 5;
+	const uint32_t retryDelayUs = 5;
+
+    uint8_t outputData_Reset[] = {registerAddress, registerValue};
+	length = sizeof(outputData_Reset);
+	while(!i2c_write_blocking(i2c_default, DS1307_I2C_ADDRESS, outputData_Reset, length, false))
+	{
+		printf("I2C write transaction failed. Retrying... "); /* Data not acknowledged by slave (or some other error) */
+
+		sleep_us(retryDelayUs);
+		errorCount++;
+		if(errorCount > maxRetries)
+		{
+			return MPU6050_REGISTER_I2C_READ_FAIL;
+		}
+	}
+
+	return STATUS_SUCCESS;
+}
