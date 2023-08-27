@@ -15,5 +15,7 @@ uint8_t Disable_DS1307_SquareWaveOutput();
 #define BCD_TO_DEC (bool)0
 #define DEC_TO_BCD (bool)1
 #define LOWER_NIBBLE_MASK 0x0F
+#define CH_BIT_REG_0_READ_MASK 0x80
+#define CH_BIT_REG_0_CLEAR_MASK 0x7F
 
 #endif /* DS1307_H */

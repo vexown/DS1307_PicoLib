@@ -86,9 +86,10 @@ uint8_t Enable_DS1307_Oscillator()
 	const uint32_t maxRetries = 5;
 	const uint32_t retryDelayUs = 5;
 
-	printf("Current Oscillator Status = %x \n", I2C_Register_Read(0x00));
+	uint8_t reg0_Val = I2C_Register_Read(0x00);
+	printf("Current Oscillator Status (1 disabled, 0 enabled) = %x \n", reg0_Val & CH_BIT_REG_0_READ_MASK);
 	printf("Enabling the Oscillator by clearing CH bit in reg 0x0... \n");
-    uint8_t outputData_Reset[] = {0x00, 0x00};
+    uint8_t outputData_Reset[] = {0x00, (reg0_Val & CH_BIT_REG_0_CLEAR_MASK)};
 	length = sizeof(outputData_Reset);
 	while(!i2c_write_blocking(i2c_default, DS1307_I2C_ADDRESS, outputData_Reset, length, false))
 	{
